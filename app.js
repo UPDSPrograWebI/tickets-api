@@ -30,6 +30,30 @@ app.all('/*', function(req, res, next) {
 	}
 });
 
+// DB
+var knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host     : '127.0.0.1',
+    user     : 'root',
+    database : 'midb', // no se que nombre tiene tu DB
+    charset  : 'utf8'
+  }
+});
+
+var bookshelf = require('bookshelf')(knex);
+
+var User = bookshelf.Model.extend({
+  tableName: 'user' // No se el nombre de tu tabla de usuarios.
+});
+
+User.where('user_id', 1).fetch().then(function(user) { // No se el id de tu tabla de usuarios.
+  console.log(user.toJSON());
+}).catch(function(err) {
+  console.error(err);
+});
+// END DB
+
 app.use('/', index);
 
 // catch 404 and forward to error handler
